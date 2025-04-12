@@ -12,6 +12,22 @@ import Link from "next/link";
 import { HoverBorderGradient } from "./hover-border-gradient";
 import { FlipWords } from "./flip-words";
 
+import { useEffect, useState } from "react";
+
+const targetDate = new Date("2025-04-25T00:00:00"); // 🎯 Election day (change as needed)
+
+const getTimeRemaining = () => {
+  const now = new Date().getTime();
+  const distance = targetDate.getTime() - now;
+
+  return {
+    days: Math.max(Math.floor(distance / (1000 * 60 * 60 * 24)), 0),
+    hours: Math.max(Math.floor((distance / (1000 * 60 * 60)) % 24), 0),
+    minutes: Math.max(Math.floor((distance / 1000 / 60) % 60), 0),
+    seconds: Math.max(Math.floor((distance / 1000) % 60), 0),
+  };
+};
+
 
 export const HeroParallax = ({
   products,
@@ -61,7 +77,7 @@ export const HeroParallax = ({
   return (
     <div
       ref={ref}
-      className="h-[100vh] py-40 overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
+      className="h-[300vh] py-30 overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
     >
       <Header />
       <motion.div
@@ -106,6 +122,16 @@ export const HeroParallax = ({
 };
 
 export const Header = () => {
+  const [timeLeft, setTimeLeft] = useState(getTimeRemaining());
+
+useEffect(() => {
+  const timer = setInterval(() => {
+    setTimeLeft(getTimeRemaining());
+  }, 1000);
+
+  return () => clearInterval(timer);
+}, []);
+
   return (
     <div className="max-w-7xl relative mx-auto py-20 md:py-40 px-4 w-full  left-0 top-0">
       <h1 className="text-2xl md:text-7xl font-bold dark:text-white">
@@ -132,6 +158,42 @@ export const Header = () => {
 
       </HoverBorderGradient>
     </div>
+    {/* For TSX uncomment the commented types below */}
+    <div className="flex mt-5 items-center justify-center gap-5 text-center auto-cols-max">
+  <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+    <span className="countdown font-mono text-5xl">
+      <span style={{ "--value": timeLeft.days } as React.CSSProperties}>
+        {timeLeft.days}
+      </span>
+    </span>
+    days
+  </div>
+  <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+    <span className="countdown font-mono text-5xl">
+      <span style={{ "--value": timeLeft.hours } as React.CSSProperties}>
+        {timeLeft.hours}
+      </span>
+    </span>
+    hours
+  </div>
+  <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+    <span className="countdown font-mono text-5xl">
+      <span style={{ "--value": timeLeft.minutes } as React.CSSProperties}>
+        {timeLeft.minutes}
+      </span>
+    </span>
+    min
+  </div>
+  <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+    <span className="countdown font-mono text-5xl">
+      <span style={{ "--value": timeLeft.seconds } as React.CSSProperties}>
+        {timeLeft.seconds}
+      </span>
+    </span>
+    sec
+  </div>
+</div>
+
     </div>
   );
 };
