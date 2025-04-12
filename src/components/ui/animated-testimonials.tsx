@@ -1,4 +1,5 @@
-"use client";
+// components/ui/animated-testimonials.tsx
+'use client';
 
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,20 +7,14 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { HoverBorderGradient } from "./hover-border-gradient";
 import Link from "next/link";
-type Testimonial = {
-  name: string;
-  title: string;
-  description: string;
-  image: string;
-};
+import { Testimonial } from '@/info';
 
-export const AnimatedTestimonials = ({
-  aboutcandidates,
-  autoplay = false,
-}: {
+type Props = {
   aboutcandidates: Testimonial[];
   autoplay?: boolean;
-}) => {
+};
+
+export const AnimatedTestimonials: React.FC<Props> = ({ aboutcandidates, autoplay = false }) => {
   const [active, setActive] = useState(0);
 
   const handleNext = () => {
@@ -49,7 +44,7 @@ export const AnimatedTestimonials = ({
             <AnimatePresence>
               {aboutcandidates.map((testimonial, index) => (
                 <motion.div
-                  key={testimonial.image + index}
+                  key={testimonial.name + index}
                   initial={{ opacity: 0, scale: 0.9, z: -100, rotate: randomRotateY() }}
                   animate={{
                     opacity: isActive(index) ? 1 : 0.7,
@@ -103,20 +98,22 @@ export const AnimatedTestimonials = ({
                 </motion.span>
               ))}
             </motion.p>
-            <div className=" flex justify-start mt-10 text-center">
-                  <HoverBorderGradient
-                    containerClassName="rounded-full"
-                    as="button"
-                    className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
-                  >
-            
-                    <Link href={aboutcandidates[active].link}>
+
+            {aboutcandidates[active].link && (
+              <div className="flex justify-start mt-10 text-center">
+                <HoverBorderGradient
+                  containerClassName="rounded-full"
+                  as="button"
+                  className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
+                >
+                  <Link href={aboutcandidates[active].link}>
                     <span>Learn More</span>
-                    </Link>
-            
-                  </HoverBorderGradient>
-                </div>
+                  </Link>
+                </HoverBorderGradient>
+              </div>
+            )}
           </motion.div>
+
           <div className="flex gap-4 pt-12 md:pt-0">
             <button
               onClick={handlePrev}

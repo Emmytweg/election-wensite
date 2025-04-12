@@ -14,26 +14,26 @@ export const products = [
   {
     title: "Moonbeam",
     link: "https://gomoonbeam.com",
-    thumbnail:elec1,
+    thumbnail: elec1.src,
   },
   {
     title: "Moonriver",
     link: "https://moonbeam.network",
-    thumbnail: elec2,
+    thumbnail: elec2.src,
   },
   {
     title: "Moonbase Alpha",
     link: "https://moonbase.moonbeam.network",
-    thumbnail: elec3,
+    thumbnail: elec3.src,
   },
   {
     title: "Moonwell",
     link: "https://moonwell.fi",
-    thumbnail: elec4,
+    thumbnail: elec4.src,
   },
   {
     title: "Moonbeam Foundation",
     link: "https://moonbeam.foundation",
-    thumbnail: elec5,
+    thumbnail: elec5.src,
   }
 ];
