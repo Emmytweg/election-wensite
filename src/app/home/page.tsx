@@ -3,6 +3,7 @@ import Hero from './Hero/Hero'
 import Candidates from '../candidates/page'
 import {ElectionTimeline} from '../election-timeline/ElectionTimeline'
 import { DM_Sans } from 'next/font/google'
+import HowToVote from './HowToVote/HowToVote'
 
 const dm_sans = DM_Sans({
   subsets: ['latin'],
@@ -17,6 +18,7 @@ const Home = () => {
       <Hero />
       <Candidates />
       <ElectionTimeline /> 
+      <HowToVote />
     </div>
   )
 }

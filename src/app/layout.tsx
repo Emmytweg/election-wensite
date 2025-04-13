@@ -4,6 +4,7 @@ import {Inter} from "next/font/google";
 import "./globals.css";
 import {NavbarDemo} from "@/components/ui/NavBar/NavbarDemo";
 import { Variable } from "lucide-react";
+import Footer from "@/components/ui/Footer/Footer";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -40,6 +41,7 @@ export default function RootLayout({
       >
         <NavbarDemo />
         {children}
+        <Footer />
       </body>
     </html>
   );
