@@ -35,13 +35,13 @@ const HowToVote = () => {
   return (
     <div className='flex justify-center items-center' >
      
-      <CardSpotlight className="h-96 lg:w-full m-10 w-96 lg:text-center">
+      <CardSpotlight className="h-full lg:w-full m-10 w-96 lg:text-center">
       <p className="text-5xl font-bold relative z-20 mt-2 text-white">
     How To Vote
       </p>
       <div className="text-neutral-200 mt-4 relative z-20">
         Follow these steps to be an accredited voter:
-        <ul className="list-none text-start flex flex-col gap-2 justify-center items-center  mt-2">
+        <ul className="list-none text-start flex flex-col gap-2 justify-center items-start lg:items-center  mt-2">
           <Step  title="Enter your email address" />
           <Step title="Create a strong password" />
           <Step title="Set up two-factor authentication" />

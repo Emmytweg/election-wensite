@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Navbar,
   NavBody,
@@ -17,48 +18,29 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
+
 export function NavbarDemo() {
   const navItems = [
-    {
-      name: "Home",
-      link: "/home",
-    },
-    {
-      name: "Candidates",
-      link: "/candidate",
-    },
-    {
-      name: "Vote",
-      link: "/vote",
-    },
-    
-    {
-      name: "Results",
-      link: "/about",
-    },
-    {
-      name: "Contact",
-      link: "/contact",
-    },
-   
+    { name: "Home", link: "/home" },
+    { name: "Candidates", link: "/candidate" },
+    { name: "Vote", link: "/vote" },
+    { name: "Results", link: "/about" },
+    { name: "Contact", link: "/contact" },
   ];
- 
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
- 
+
   return (
     <div className={`${inter.className} relative w-full`}>
       <Navbar>
-        {/* Desktop Navigation */}
         <NavBody>
           <NavbarLogo />
-          <NavItems items={navItems} />
+          <NavItems items={navItems} onItemClick={() => setIsMobileMenuOpen(false)} />
           <div className="flex items-center gap-4">
             <NavbarButton variant="secondary">Login</NavbarButton>
-            {/* <NavbarButton variant="primary">Book a call</NavbarButton> */}
           </div>
         </NavBody>
- 
-        {/* Mobile Navigation */}
+
         <MobileNav>
           <MobileNavHeader>
             <NavbarLogo />
@@ -67,7 +49,7 @@ export function NavbarDemo() {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             />
           </MobileNavHeader>
- 
+
           <MobileNavMenu
             isOpen={isMobileMenuOpen}
             onClose={() => setIsMobileMenuOpen(false)}
@@ -101,9 +83,6 @@ export function NavbarDemo() {
           </MobileNavMenu>
         </MobileNav>
       </Navbar>
-  
- 
-      {/* Navbar */}
     </div>
   );
 }
