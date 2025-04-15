@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import AboutCandidtes from "../../app/candidates/AboutCandidtes";
+import AboutCandidtes from "./AboutCandidtes";
 import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -17,7 +17,7 @@ const Candidates = () => {
   }, []);
 
   return (
-    <div className="px-4 py-12 md:px-8 lg:px-20">
+    <div className="px-4 relative -top-96 md:px-8 lg:px-20">
       <motion.h1
         className="text-5xl font-bold text-center"
         initial={{ y: -50, opacity: 0, scale: 0.8 }}

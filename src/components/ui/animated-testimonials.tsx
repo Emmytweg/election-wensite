@@ -7,10 +7,10 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { HoverBorderGradient } from "./hover-border-gradient";
 import Link from "next/link";
-import { Testimonial } from '@/info';
+import { CandidateInfo } from '@/info';
 
 type Props = {
-  aboutcandidates: Testimonial[];
+  aboutcandidates: CandidateInfo[];
   autoplay?: boolean;
 };
 
@@ -99,17 +99,17 @@ export const AnimatedTestimonials: React.FC<Props> = ({ aboutcandidates, autopla
               ))}
             </motion.p>
 
-            {aboutcandidates[active].link && (
+            {aboutcandidates[active].slug && (
               <div className="flex justify-start mt-10 text-center">
-                <HoverBorderGradient
-                  containerClassName="rounded-full"
-                  as="button"
-                  className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
-                >
-                  <Link href={aboutcandidates[active].link}>
+                <Link href={`/candidate/${aboutcandidates[active].slug}`}>
+                  <HoverBorderGradient
+                    containerClassName="rounded-full"
+                    as="button"
+                    className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
+                  >
                     <span>Learn More</span>
-                  </Link>
-                </HoverBorderGradient>
+                  </HoverBorderGradient>
+                </Link>
               </div>
             )}
           </motion.div>

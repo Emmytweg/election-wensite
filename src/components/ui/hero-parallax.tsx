@@ -69,7 +69,7 @@ export const HeroParallax = ({
     springConfig
   );
   const translateY = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [-700, 500]),
+    useTransform(scrollYProgress, [0, 0.2], [-700, 10]),
     springConfig
   );
 
@@ -198,7 +198,7 @@ export const ProductCard = ({
         y: -20,
       }}
       key={product.title}
-      className="group/product h-64 w-[90vw] sm:h-80 sm:w-96 md:h-96 md:w-[30rem] relative shrink-0"
+      className="group/product h-20 w-[90vw] sm:h-80 sm:w-96 md:h-96 md:w-[30rem] relative shrink-0"
     >
       <Link
         href={product.link}

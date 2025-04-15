@@ -1,6 +1,6 @@
 import React from 'react'
 import Hero from './Hero/Hero'
-import Candidates from '../candidates/page'
+import Candidates from './Candidates'
 import {ElectionTimeline} from '../election-timeline/ElectionTimeline'
 import { DM_Sans } from 'next/font/google'
 import HowToVote from './HowToVote/HowToVote'

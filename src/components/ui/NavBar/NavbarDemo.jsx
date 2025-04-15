@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { useState } from "react";
 import { Inter } from "next/font/google";
-
+import Link from "next/link";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -21,7 +21,7 @@ const inter = Inter({
 
 export function NavbarDemo() {
   const navItems = [
-    { name: "Home", link: "/home" },
+    { name: "Home", link: "/" },
     { name: "Candidates", link: "/candidate" },
     { name: "Vote", link: "/vote" },
     { name: "Results", link: "/about" },
@@ -37,7 +37,10 @@ export function NavbarDemo() {
           <NavbarLogo />
           <NavItems items={navItems} onItemClick={() => setIsMobileMenuOpen(false)} />
           <div className="flex items-center gap-4">
+            <Link href='/login'> 
             <NavbarButton variant="secondary">Login</NavbarButton>
+ 
+            </Link>
           </div>
         </NavBody>
 
@@ -55,14 +58,14 @@ export function NavbarDemo() {
             onClose={() => setIsMobileMenuOpen(false)}
           >
             {navItems.map((item, idx) => (
-              <a
+              <Link
                 key={`mobile-link-${idx}`}
                 href={item.link}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="relative text-neutral-600 dark:text-neutral-300"
               >
                 <span className="block">{item.name}</span>
-              </a>
+              </Link>
             ))}
             <div className="flex w-full flex-col gap-4">
               <NavbarButton
@@ -72,13 +75,13 @@ export function NavbarDemo() {
               >
                 Login
               </NavbarButton>
-              <NavbarButton
+              {/* <NavbarButton
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
                 className="w-full"
               >
                 Book a call
-              </NavbarButton>
+              </NavbarButton> */}
             </div>
           </MobileNavMenu>
         </MobileNav>
