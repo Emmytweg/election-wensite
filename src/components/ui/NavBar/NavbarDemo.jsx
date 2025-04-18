@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 import { Inter } from "next/font/google";
 import Link from "next/link";
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -36,10 +37,13 @@ export function NavbarDemo() {
         <NavBody>
           <NavbarLogo />
           <NavItems items={navItems} onItemClick={() => setIsMobileMenuOpen(false)} />
-          <div className="flex items-center gap-4">
-            <Link href='/login'> 
-            <NavbarButton variant="secondary">Login</NavbarButton>
- 
+
+          <div className="flex items-center gap-4 ml-auto">
+            <Link href="/signup">
+              <NavbarButton variant="primary">SignUp</NavbarButton>
+            </Link>
+            <Link href="/login">
+              <NavbarButton variant="secondary">Login</NavbarButton>
             </Link>
           </div>
         </NavBody>
@@ -64,24 +68,28 @@ export function NavbarDemo() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="relative text-neutral-600 dark:text-neutral-300"
               >
-                <span className="block">{item.name}</span>
+                <span className="block py-2">{item.name}</span>
               </Link>
             ))}
-            <div className="flex w-full flex-col gap-4">
-              <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
-              >
-                Login
-              </NavbarButton>
-              {/* <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
-              >
-                Book a call
-              </NavbarButton> */}
+            <div className="mt-4 flex w-full flex-col gap-4">
+              <Link href="/login">
+                <NavbarButton
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  variant="secondary"
+                  className="w-full"
+                >
+                  Login
+                </NavbarButton>
+              </Link>
+              <Link href="/signup">
+                <NavbarButton
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  variant="primary"
+                  className="w-full"
+                >
+                  SignUp
+                </NavbarButton>
+              </Link>
             </div>
           </MobileNavMenu>
         </MobileNav>
