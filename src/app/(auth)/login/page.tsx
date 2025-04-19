@@ -1,41 +1,59 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-export default function LoginPage() {
-  const [formData, setFormData] = useState({
-    matricNumber: "",
-    password: "",
-  });
+// Validation schema
+const schema = yup.object().shape({
+  matricNumber: yup.string().required("Matric Number is required"),
+  password: yup
+    .string()
+    .min(4, "Password must be at least 4 characters")
+    .required("Password is required"),
+});
 
+type FormData = {
+  matricNumber: string;
+  password: string;
+};
+
+export default function LoginPage() {
   const router = useRouter();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
+  });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const onSubmit = (data: FormData) => {
     const users = JSON.parse(localStorage.getItem("users") || "[]");
 
     const foundUser = users.find(
       (user: { matricNumber: string; password: string }) =>
-        user.matricNumber === formData.matricNumber &&
-        user.password === formData.password
+        user.matricNumber === data.matricNumber &&
+        user.password === data.password
     );
 
     if (!foundUser) {
-      alert("Invalid matric number or password.");
+      setError("matricNumber", {
+        type: "manual",
+        message: "Invalid matric number or password.",
+      });
+      setError("password", {
+        type: "manual",
+        message: "Invalid matric number or password.",
+      });
       return;
     }
 
@@ -54,17 +72,18 @@ export default function LoginPage() {
           Log in to participate in the upcoming Election.
         </p>
 
-        <form className="my-8" onSubmit={handleSubmit}>
+        <form className="my-8" onSubmit={handleSubmit(onSubmit)}>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="matricNumber">Matric Number</Label>
             <Input
               id="matricNumber"
-              value={formData.matricNumber}
-              onChange={handleChange}
               placeholder="190295"
               type="text"
-              required
+              {...register("matricNumber")}
             />
+            {errors.matricNumber && (
+              <p className="text-sm text-red-500">{errors.matricNumber.message}</p>
+            )}
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
@@ -73,10 +92,11 @@ export default function LoginPage() {
               id="password"
               placeholder="Input Your Password"
               type="password"
-              onChange={handleChange}
-              value={formData.password}
-              required
+              {...register("password")}
             />
+            {errors.password && (
+              <p className="text-sm text-red-500">{errors.password.message}</p>
+            )}
           </LabelInputContainer>
 
           <button
@@ -86,6 +106,13 @@ export default function LoginPage() {
             Login →
             <BottomGradient />
           </button>
+
+          <p className="mt-4 text-sm text-center text-gray-500 dark:text-gray-400">
+            Don't have an account?{" "}
+            <Link href="/signup" className="text-blue-600 underline">
+              Register
+            </Link>
+          </p>
         </form>
       </div>
     </div>

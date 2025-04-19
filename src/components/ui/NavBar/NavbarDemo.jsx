@@ -24,7 +24,7 @@ export function NavbarDemo() {
   const navItems = [
     { name: "Home", link: "/" },
     { name: "Candidates", link: "/candidate" },
-    { name: "Vote", link: "/vote" },
+    { name: "Vote", link: "/login" },
     { name: "Results", link: "/about" },
     { name: "Contact", link: "/contact" },
   ];

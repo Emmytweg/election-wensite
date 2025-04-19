@@ -4,9 +4,12 @@ import hilary from '../src/images/hilary.png';
 import samuel from '../src/images/samuel.png';
 import yung from '../src/images/Yung.png';
 import dorcas from '../src/images/dorcas.png';
+import kenneth from '../src/images/kenneth.jpeg';
+import lillian from '../src/images/lillian.jpeg';
+import victor from '../src/images/victor.jpeg'
 import { StaticImageData } from 'next/image';
 
-export  type CandidateInfo = {
+export type CandidateInfo = {
   name: string;
   title: string;
   image: StaticImageData;
@@ -20,8 +23,7 @@ export  type CandidateInfo = {
     content: string;
   }[];
   link?: string;
-}
-
+};
 
 export const candidates: CandidateInfo[] = [
   {
@@ -165,6 +167,96 @@ export const candidates: CandidateInfo[] = [
       {
         title: "Education",
         content: "Regular police workshops and training in conflict resolution will be required."
+      }
+    ],
+    link: "#"
+  },
+
+  // Additional Candidates for overlapping positions
+
+  {
+    name: "Victor James",
+    title: "Candidate for Mayor",
+    image: victor,
+    slug: "victor-james",
+    description: "Victor aims to modernize city services and reduce youth unemployment.",
+    summary: "Tech-savvy visionary with a strong youth focus.",
+    biography: "Victor James is a tech consultant turned politician focused on modernizing governance and solving youth unemployment.",
+    agenda: [
+      "Digitalize city services",
+      "Establish tech hubs for youths",
+      "Improve public transportation"
+    ],
+    policies: [
+      {
+        title: "Tech Integration",
+        content: "Victor will automate permit systems and introduce an e-governance platform."
+      },
+      {
+        title: "Youth Employment",
+        content: "Coding bootcamps and job match programs for graduates."
+      },
+      {
+        title: "Transport",
+        content: "He plans to introduce electric buses for city routes."
+      }
+    ],
+    link: "#"
+  },
+  {
+    name: "Lilian Grace",
+    title: "Candidate for Treasurer",
+    image: lillian,
+    slug: "lilian-grace",
+    description: "Lilian promotes ethical finance and anti-corruption practices.",
+    summary: "Advocate for clean accounting and decentralized reporting.",
+    biography: "Lilian Grace is a public auditor who has helped investigate multiple corruption cases and believes in full transparency of city accounts.",
+    agenda: [
+      "Launch anti-corruption watchdog",
+      "Digitize revenue collection",
+      "Monthly budget transparency reports"
+    ],
+    policies: [
+      {
+        title: "Anti-Corruption",
+        content: "Whistleblower programs and public audit trails will be created."
+      },
+      {
+        title: "Digital Finance",
+        content: "Automated systems for revenue collection to eliminate leakages."
+      },
+      {
+        title: "Community Accountability",
+        content: "Monthly meetings to review city expenses with citizens."
+      }
+    ],
+    link: "#"
+  },
+  {
+    name: "Kenneth Cole",
+    title: "Candidate for Mayor",
+    image: kenneth,
+    slug: "kenneth-cole",
+    description: "Kenneth believes in sustainable urban growth and community-led development.",
+    summary: "Environmental advocate with a grassroots approach.",
+    biography: "Kenneth Cole has a background in environmental science and urban planning, and focuses on sustainable growth.",
+    agenda: [
+      "Plant 10,000 city trees",
+      "Create green parks and spaces",
+      "Support eco-friendly businesses"
+    ],
+    policies: [
+      {
+        title: "Environment",
+        content: "Kenneth will reduce city carbon emissions by 40% over 5 years."
+      },
+      {
+        title: "Urban Planning",
+        content: "Involve communities in new building project decisions."
+      },
+      {
+        title: "Business",
+        content: "Tax cuts for eco-friendly startups."
       }
     ],
     link: "#"
