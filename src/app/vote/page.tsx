@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import StoreCandidates from './StoredCandidates';
 // import { candidates } from '@/info';
+import toast from 'react-hot-toast';
 interface Candidate {
   id: string;
   fullName: string;
@@ -42,9 +43,9 @@ const Vote = () => {
   }, []);
 
   const handleVote = async (position: string, candidateId: string) => {
-    if (votes[position]) return alert(`You already voted for ${position}`);
+    if (votes[position]) return toast.success(`You already voted for ${position}`);
     const user = JSON.parse(localStorage.getItem('user') || 'null');
-    if (!user) return alert('Please log in to vote');
+    if (!user) return toast.error('Please log in to vote');
 
     try {
       const res = await fetch(`${API_URL}/vote`, {
@@ -54,16 +55,16 @@ const Vote = () => {
       });
 
       const data = await res.json();
-      if (!res.ok) return alert(data.message);
+      if (!res.ok) return toast.error(data.message);
 
       const updatedVotes = { ...votes, [position]: candidateId };
       setVotes(updatedVotes);
       localStorage.setItem('sessionVotes', JSON.stringify(updatedVotes));
       
-      alert(`Vote recorded for ${position}`);
+      toast.success(`Vote recorded for ${position}`);
     } catch (err) {
       console.error('Vote error:', err);
-      alert('Something went wrong. Try again.');
+      toast.error('Something went wrong. Try again.');
     }
   };
 
@@ -72,12 +73,12 @@ const Vote = () => {
 
   const handleNext = () => {
     if (!votes[currentPosition]) {
-      return alert(`Please vote for ${currentPosition} first.`);
+      return toast.success(`Please vote for ${currentPosition} first.`);
     }
     if (currentIndex < positions.length - 1) {
       setCurrentIndex(i => i + 1);
     } else {
-      alert('✅ Voting complete!');
+      toast.success('✅ Voting complete!');
       window.location.href = '/result';
     }
   };

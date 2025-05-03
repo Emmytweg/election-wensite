@@ -25,6 +25,7 @@ type FormData = {
 };
 
 export default function LoginPage() {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const {
@@ -40,6 +41,7 @@ export default function LoginPage() {
 
 
   const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
     try {
       const res = await fetch(`${API_URL}/login`, {
         method: "POST",
@@ -72,6 +74,8 @@ export default function LoginPage() {
         type: "manual",
         message: "Server error. Please try again.",
       });
+    } finally{
+      setIsLoading(false);
     }
   };
   
