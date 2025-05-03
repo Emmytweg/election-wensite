@@ -12,7 +12,6 @@ import Link from "next/link";
 import { HoverBorderGradient } from "./hover-border-gradient";
 import { FlipWords } from "./flip-words";
 
-// 🎯 Election day (change as needed)
 const targetDate = new Date("2025-04-25T00:00:00");
 
 const getTimeRemaining = () => {
@@ -36,10 +35,20 @@ export const HeroParallax = ({
     thumbnail: string;
   }[];
 }) => {
-  const firstRow = products.slice(0, 5);
-  const secondRow = products.slice(5, 10);
-  const thirdRow = products.slice(10, 15);
+  const firstRow = products.slice(0, 3); // Reduced for mobile
+  const secondRow = products.slice(3, 6); // Reduced for mobile
+  const thirdRow = products.slice(6, 9); // Reduced for mobile
   const ref = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -48,16 +57,17 @@ export const HeroParallax = ({
 
   const springConfig = { stiffness: 300, damping: 30, bounce: 100 };
 
+  // Reduced parallax effect on mobile
   const translateX = useSpring(
-    useTransform(scrollYProgress, [0, 1], [0, 1000]),
+    useTransform(scrollYProgress, [0, 1], [0, isMobile ? 300 : 1000]),
     springConfig
   );
   const translateXReverse = useSpring(
-    useTransform(scrollYProgress, [0, 1], [0, -1000]),
+    useTransform(scrollYProgress, [0, 1], [0, isMobile ? -300 : -1000]),
     springConfig
   );
   const rotateX = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [15, 0]),
+    useTransform(scrollYProgress, [0, 0.2], [isMobile ? 5 : 15, 0]),
     springConfig
   );
   const opacity = useSpring(
@@ -65,18 +75,18 @@ export const HeroParallax = ({
     springConfig
   );
   const rotateZ = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [20, 0]),
+    useTransform(scrollYProgress, [0, 0.2], [isMobile ? 10 : 20, 0]),
     springConfig
   );
   const translateY = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [-700, 10]),
+    useTransform(scrollYProgress, [0, 0.2], [isMobile ? -200 : -700, 10]),
     springConfig
   );
 
   return (
     <div
       ref={ref}
-      className="h-[200vh] md:h-[250vh] lg:h-[300vh] py-20 md:py-30 overflow-hidden antialiased relative flex flex-col [perspective:1000px] [transform-style:preserve-3d]"
+      className=" md:h-[250vh] lg:h-[300vh] py-10 md:py-20 overflow-hidden antialiased relative flex flex-col [perspective:1000px] [transform-style:preserve-3d]"
     >
       <Header />
       <motion.div
@@ -87,30 +97,33 @@ export const HeroParallax = ({
           opacity,
         }}
       >
-        <motion.div className="flex flex-row-reverse space-x-reverse space-x-4 sm:space-x-10 md:space-x-20 mb-10 md:mb-20">
+        <motion.div className="flex flex-row-reverse space-x-reverse space-x-2 sm:space-x-4 md:space-x-20 mb-5 md:mb-20">
           {firstRow.map((product) => (
             <ProductCard
               product={product}
               translate={translateX}
               key={product.title}
+              isMobile={isMobile}
             />
           ))}
         </motion.div>
-        <motion.div className="flex flex-row space-x-4 sm:space-x-10 md:space-x-20 mb-10 md:mb-20">
+        <motion.div className="flex flex-row space-x-2 sm:space-x-4 md:space-x-20 mb-5 md:mb-20">
           {secondRow.map((product) => (
             <ProductCard
               product={product}
               translate={translateXReverse}
               key={product.title}
+              isMobile={isMobile}
             />
           ))}
         </motion.div>
-        <motion.div className="flex flex-row-reverse space-x-reverse space-x-4 sm:space-x-10 md:space-x-20">
+        <motion.div className="flex flex-row-reverse space-x-reverse space-x-2 sm:space-x-4 md:space-x-20">
           {thirdRow.map((product) => (
             <ProductCard
               product={product}
               translate={translateX}
               key={product.title}
+              isMobile={isMobile}
             />
           ))}
         </motion.div>
@@ -121,6 +134,16 @@ export const HeroParallax = ({
 
 export const Header = () => {
   const [timeLeft, setTimeLeft] = useState(getTimeRemaining());
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -130,24 +153,25 @@ export const Header = () => {
   }, []);
 
   return (
-    <div className="max-w-7xl relative mx-auto py-20 md:py-40 px-4 w-full left-0 top-0">
-      <h1 className="text-2xl md:text-7xl font-bold dark:text-white">
+    <div className="max-w-7xl relative mx-auto py-10 md:py-40 px-4 w-full left-0 top-0">
+      <h1 className="text-3xl md:text-7xl font-bold dark:text-white">
         Vote Now <br /> Your voice, to{" "}
-        <span className="text-2xl md:text-7xl font-bold dark:text-white">
+        <span className="text-3xl md:text-7xl font-bold dark:text-white">
           <FlipWords
             words={["Vote", "Participate", "Engage", "Empower", "Decide"]}
+            duration={isMobile ? 3000 : 2000} // Slower on mobile for better readability
           />
         </span>
       </h1>
-      <p className="max-w-2xl text-base md:text-xl mt-8 dark:text-neutral-200">
-        Participate in the upcoming elections and make your voice heard. <br />
+      <p className="max-w-2xl text-sm md:text-xl mt-4 md:mt-8 dark:text-neutral-200">
+        Participate in the upcoming elections and make your voice heard. <br className="hidden sm:block" />
         Every vote counts, and your opinion matters.
       </p>
-      <div className="flex justify-start mt-10 text-center">
+      <div className="flex justify-start mt-6 md:mt-10 text-center">
         <HoverBorderGradient
           containerClassName="rounded-full"
           as="button"
-          className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
+          className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2 px-4 py-2 text-sm md:text-base"
         >
           <Link href="/vote">
             <span>Vote Now</span>
@@ -155,21 +179,21 @@ export const Header = () => {
         </HoverBorderGradient>
       </div>
 
-      {/* Countdown */}
-      <div className="flex mt-5 items-center justify-center gap-5 text-center auto-cols-max">
-        {["days", "hours", "minutes", "seconds"].map((unit, i) => {
-          const value = [timeLeft.days, timeLeft.hours, timeLeft.minutes, timeLeft.seconds][i];
+      {/* Countdown - Responsive */}
+      <div className="flex flex-wrap justify-center mt-5 gap-2 md:gap-5 text-center auto-cols-max">
+        {["days", "hours", "minutes", "seconds"].map((unit, t) => {
+          const value = [timeLeft.days, timeLeft.hours, timeLeft.minutes, timeLeft.seconds][t];
           return (
             <div
               key={unit}
-              className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content"
+              className="flex flex-col p-1 md:p-2 bg-neutral rounded-box text-neutral-content min-w-[60px] md:min-w-[80px]"
             >
-              <span className="countdown font-mono text-4xl sm:text-5xl">
+              <span className="countdown font-mono text-2xl sm:text-3xl md:text-5xl">
                 <span style={{ "--value": value } as React.CSSProperties}>
                   {value}
                 </span>
               </span>
-              {unit}
+              <span className="text-xs md:text-sm">{unit}</span>
             </div>
           );
         })}
@@ -181,6 +205,7 @@ export const Header = () => {
 export const ProductCard = ({
   product,
   translate,
+  isMobile,
 }: {
   product: {
     title: string;
@@ -188,6 +213,7 @@ export const ProductCard = ({
     thumbnail: string;
   };
   translate: MotionValue<number>;
+  isMobile: boolean;
 }) => {
   return (
     <motion.div
@@ -195,10 +221,10 @@ export const ProductCard = ({
         x: translate,
       }}
       whileHover={{
-        y: -20,
+        y: isMobile ? -10 : -20,
       }}
       key={product.title}
-      className="group/product h-20 w-[90vw] sm:h-80 sm:w-96 md:h-96 md:w-[30rem] relative shrink-0"
+      className={`group/product ${isMobile ? 'h-40 w-40' : 'h-80 w-96 md:h-96 md:w-[30rem]'} relative shrink-0`}
     >
       <Link
         href={product.link}
@@ -210,10 +236,11 @@ export const ProductCard = ({
           width={600}
           className="object-cover object-center absolute h-full w-full inset-0 rounded-xl"
           alt={product.title}
+          priority={false}
         />
       </Link>
       <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-80 bg-black pointer-events-none rounded-xl" />
-      <h2 className="absolute bottom-4 left-4 opacity-0 group-hover/product:opacity-100 text-white text-base sm:text-lg font-semibold">
+      <h2 className="absolute bottom-2 left-2 md:bottom-4 md:left-4 opacity-0 group-hover/product:opacity-100 text-white text-xs sm:text-sm md:text-lg font-semibold">
         {product.title}
       </h2>
     </motion.div>

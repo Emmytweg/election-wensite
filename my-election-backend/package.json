@@ -1,0 +1,21 @@
+{
+  "name": "my-election-backend",
+  "version": "1.0.0",
+  "description": "my local backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "build": "echo \"Building the project...\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10",
+    "write-file-atomic": "^6.0.0"
+  }
+}

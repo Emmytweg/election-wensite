@@ -12,28 +12,28 @@ export default function Hero() {
 }
 export const products = [
   {
-    title: "Moonbeam",
-    link: "https://gomoonbeam.com",
+    title: "",
+    link: "",
     thumbnail: elec1.src,
   },
   {
-    title: "Moonriver",
-    link: "https://moonbeam.network",
+    title: "",
+    link: "",
     thumbnail: elec2.src,
   },
   {
-    title: "Moonbase Alpha",
-    link: "https://moonbase.moonbeam.network",
+    title: "",
+    link: "",
     thumbnail: elec3.src,
   },
   {
-    title: "Moonwell",
-    link: "https://moonwell.fi",
+    title: "",
+    link: "",
     thumbnail: elec4.src,
   },
   {
-    title: "Moonbeam Foundation",
-    link: "https://moonbeam.foundation",
+    title: "",
+    link: "",
     thumbnail: elec5.src,
   }
 ];

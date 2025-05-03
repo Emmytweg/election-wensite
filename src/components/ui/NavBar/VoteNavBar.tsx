@@ -22,13 +22,19 @@ export default function VoteNavBar() {
     }
   }, []);
 
+  const onLogOut = () => {
+    localStorage.removeItem('sessionVotes');
+  localStorage.removeItem('user');
+  
+  }
   return (
     <div className='flex justify-between items-center p-6'>
       <div className='flex gap-4'>
         <Image
           src={john}
           alt='User Image'
-          
+          height={40}
+          width={40}
           className='rounded-full w-10 h-10   '
         />
         <div>
@@ -42,7 +48,7 @@ export default function VoteNavBar() {
           className=''
           href='/'
           variant='primary'
-          onClick={() => localStorage.removeItem("user")}
+          onClick={onLogOut}
         >
           Sign Out
         </NavbarButton>

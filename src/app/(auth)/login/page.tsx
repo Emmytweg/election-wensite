@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React,{useState} from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-
+import Users from '../../../../my-election-backend/users.json'
 // Validation schema
 const schema = yup.object().shape({
   matricNumber: yup.string().required("Matric Number is required"),
@@ -35,32 +35,46 @@ export default function LoginPage() {
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
+ 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const onSubmit = (data: FormData) => {
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
 
-    const foundUser = users.find(
-      (user: { matricNumber: string; password: string }) =>
-        user.matricNumber === data.matricNumber &&
-        user.password === data.password
-    );
-
-    if (!foundUser) {
+  const onSubmit = async (data: FormData) => {
+    try {
+      const res = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  
+      const result = await res.json();
+  
+      if (!res.ok) {
+        setError("matricNumber", {
+          type: "manual",
+          message: result.message || "Login failed",
+        });
+        setError("password", {
+          type: "manual",
+          message: result.message || "Login failed",
+        });
+        return;
+      }
+  
+      localStorage.setItem("user", JSON.stringify(result.user));
+      alert("Login successful!");
+      router.push("/vote");
+    } catch (error) {
+      console.error(error);
       setError("matricNumber", {
         type: "manual",
-        message: "Invalid matric number or password.",
+        message: "Server error. Please try again.",
       });
-      setError("password", {
-        type: "manual",
-        message: "Invalid matric number or password.",
-      });
-      return;
     }
-
-    localStorage.setItem("user", JSON.stringify(foundUser)); // Save current session
-    alert("Login successful!");
-    router.push("/vote");
   };
+  
 
   return (
     <div className="flex justify-center items-center mt-10">
@@ -76,7 +90,7 @@ export default function LoginPage() {
           <LabelInputContainer className="mb-4">
             <Label htmlFor="matricNumber">Matric Number</Label>
             <Input
-              id="matricNumber"
+              id="matricNumber" 
               placeholder="190295"
               type="text"
               {...register("matricNumber")}
@@ -89,7 +103,7 @@ export default function LoginPage() {
           <LabelInputContainer className="mb-4">
             <Label htmlFor="password">Password</Label>
             <Input
-              id="password"
+              id="password" 
               placeholder="Input Your Password"
               type="password"
               {...register("password")}

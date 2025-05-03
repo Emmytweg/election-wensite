@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input"; // ✅ Capitalized
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -15,37 +15,53 @@ const schema = yup.object().shape({
   matricNumber: yup.string().required("Matric Number is required"),
   fullName: yup.string().required("Full Name is required"),
   department: yup.string().required("Department is required"),
+  faculty: yup.string().required("Faculty is required"),
+  hallOfResidence: yup.string().required("Hall Of Residence is required"),
   level: yup.number().typeError("Level must be a number").required("Level is required"),
   password: yup.string().min(4, "Password must be at least 4 characters").required("Password is required"),
 });
 
+type FormData = yup.InferType<typeof schema>; // Define type from schema
+
 export default function SignupPage() {
   const router = useRouter();
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://election-website-hgha.onrender.com"; // Fallback to local URL if env variable is not set
+
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (formData: any) => {
-    const users = JSON.parse(localStorage.getItem("users") || "[]") as Array<{ matricNumber: string }>;
+  const onSubmit = async (data: FormData) => {
+    try {
+      const res = await fetch(`${API_URL}/users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
-    const userExists = users.some((user) => user.matricNumber === formData.matricNumber);
+      const responseData = await res.json();
+      if (res.ok) {
+        alert(responseData.message || "Registration successful!");
+        console.log(responseData);
+        const { fullName, matricNumber, department } = responseData.user;
 
-    if (userExists) {
-      alert("Matric number already registered.");
-      return;
+        localStorage.setItem('user', JSON.stringify({ fullName, matricNumber, department }));
+
+        router.push("/vote");
+      } else {
+        alert(responseData.message || "Registration failed. Please try again.");
+      }
+    } catch (error: any) {
+      console.error(error);
+      alert('Error Submitting Form: ' + error.message);
     }
-
-    const updatedUsers = [...users, formData];
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-    localStorage.setItem("user", JSON.stringify(formData)); // current session
-
-    alert("Registration successful!");
-    router.push("/vote");
   };
 
   return (
@@ -72,20 +88,32 @@ export default function SignupPage() {
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
+            <Label htmlFor="faculty">Faculty</Label>
+            <Input id="faculty" {...register("faculty")} placeholder="Technology" />
+            <ErrorText>{errors.faculty?.message}</ErrorText>
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-4">
             <Label htmlFor="department">Department</Label>
             <Input id="department" {...register("department")} placeholder="Electrical Engineering" />
             <ErrorText>{errors.department?.message}</ErrorText>
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
+            <Label htmlFor="hallOfResidence">Hall Of Residence</Label>
+            <Input id="hallOfResidence" {...register("hallOfResidence")} placeholder="Queen Idia Hall" />
+            <ErrorText>{errors.hallOfResidence?.message}</ErrorText>
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-4">
             <Label htmlFor="level">Level</Label>
-            <Input id="level" {...register("level")} placeholder="400" type="number" />
+            <Input id="level" type="number" {...register("level")} placeholder="400" />
             <ErrorText>{errors.level?.message}</ErrorText>
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" {...register("password")} placeholder="Input Your Password" type="password" />
+            <Input id="password" type="password" {...register("password")} placeholder="Input Your Password" />
             <ErrorText>{errors.password?.message}</ErrorText>
           </LabelInputContainer>
 
@@ -110,14 +138,11 @@ export default function SignupPage() {
 }
 
 // Utility Components
-
-const LabelInputContainer: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => {
-  return (
-    <div className={cn("flex w-full flex-col space-y-2", className)}>
-      {children}
-    </div>
-  );
-};
+const LabelInputContainer: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => (
+  <div className={cn("flex w-full flex-col space-y-2", className)}>
+    {children}
+  </div>
+);
 
 const BottomGradient = () => (
   <span className="absolute inset-0 h-full w-full rounded-md bg-gradient-to-br from-black to-neutral-600 opacity-0 transition-opacity duration-300 group-hover/btn:opacity-10"></span>
