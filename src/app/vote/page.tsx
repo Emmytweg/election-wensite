@@ -12,7 +12,7 @@ interface Candidate {
   image: string;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://election-website-hgha.onrender.com';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'election-wensite-production.up.railway.app';
 
 const Vote = () => {
   const [groupedCandidates, setGroupedCandidates] = useState<Record<string, Candidate[]>>({});

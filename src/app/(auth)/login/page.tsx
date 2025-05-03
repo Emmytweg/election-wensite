@@ -37,7 +37,7 @@ export default function LoginPage() {
     resolver: yupResolver(schema),
   });
  
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL|| 'election-wensite-production.up.railway.app' ;
 
 
   const onSubmit = async (data: FormData) => {
