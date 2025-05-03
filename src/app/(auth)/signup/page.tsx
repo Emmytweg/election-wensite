@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React,{useState} from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -9,6 +9,9 @@ import { Input } from "@/components/ui/input"; // ✅ Capitalized
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import toast from "react-hot-toast"
+
+
 
 // Validation schema
 const schema = yup.object().shape({
@@ -26,7 +29,7 @@ type FormData = yup.InferType<typeof schema>; // Define type from schema
 export default function SignupPage() {
   const router = useRouter();
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://election-website-hgha.onrender.com"; // Fallback to local URL if env variable is not set
-
+const[isLoading, setIsLoading] = useState(false)
 
   const {
     register,
@@ -37,18 +40,21 @@ export default function SignupPage() {
   });
 
   const onSubmit = async (data: FormData) => {
+    setIsLoading(true)
     try {
       const res = await fetch(`${API_URL}/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        
         body: JSON.stringify(data),
       });
 
       const responseData = await res.json();
       if (res.ok) {
-        alert(responseData.message || "Registration successful!");
+        toast.success(responseData.message || "Registration successful!");
+        // alert(responseData.message || "Registration successful!");
         console.log(responseData);
         const { fullName, matricNumber, department } = responseData.user;
 
@@ -56,11 +62,15 @@ export default function SignupPage() {
 
         router.push("/vote");
       } else {
-        alert(responseData.message || "Registration failed. Please try again.");
+        toast.error("Registration failed. Please try again.");
+        // alert(responseData.message || "Registration failed. Please try again.");
       }
     } catch (error: any) {
+      toast.error("An error occurred. Please try again.");
       console.error(error);
-      alert('Error Submitting Form: ' + error.message);
+      // alert('Error Submitting Form: ' + error.message);
+    }finally{
+      setIsLoading(false)
     }
   };
 
@@ -117,11 +127,11 @@ export default function SignupPage() {
             <ErrorText>{errors.password?.message}</ErrorText>
           </LabelInputContainer>
 
-          <button
+          <button disabled={isLoading}
             className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white"
             type="submit"
           >
-            Register Now →
+           {isLoading ?  'Registering...' : 'Register Now →' }
             <BottomGradient />
           </button>
 
