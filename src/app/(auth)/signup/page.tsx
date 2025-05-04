@@ -28,7 +28,7 @@ type FormData = yup.InferType<typeof schema>; // Define type from schema
 
 export default function SignupPage() {
   const router = useRouter();
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "election-wensite-production.up.railway.app"; // Fallback to local URL if env variable is not set
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'; // Fallback to local URL if env variable is not set
 const[isLoading, setIsLoading] = useState(false)
 
   const {
