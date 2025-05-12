@@ -28,8 +28,8 @@ type FormData = yup.InferType<typeof schema>; // Define type from schema
 
 export default function SignupPage() {
   const router = useRouter();
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'; // Fallback to local URL if env variable is not set
-const[isLoading, setIsLoading] = useState(false)
+  const API_URL = 'https://election-backend.up.railway.app';
+  const[isLoading, setIsLoading] = useState(false)
 
   const {
     register,
@@ -67,11 +67,13 @@ const[isLoading, setIsLoading] = useState(false)
       }
     } catch (error: any) {
       toast.error("An error occurred. Please try again.");
-      console.error(error);
+      // console.error(error);
       // alert('Error Submitting Form: ' + error.message);
     }finally{
       setIsLoading(false)
     }
+    console.log("Posting to:", `${API_URL}/users`);
+
   };
 
   return (
