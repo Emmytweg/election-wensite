@@ -42,7 +42,7 @@ const[isLoading, setIsLoading] = useState(false)
   const onSubmit = async (data: FormData) => {
     setIsLoading(true)
     try {
-      const res = await fetch('https://election-backend.up.railway.app/signup', {
+      const res = await fetch('election-backend-production-b6f7.up.railway.app/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
