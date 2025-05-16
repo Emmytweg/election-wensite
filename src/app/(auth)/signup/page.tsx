@@ -28,8 +28,8 @@ type FormData = yup.InferType<typeof schema>; // Define type from schema
 
 export default function SignupPage() {
   const router = useRouter();
-  const API_URL = 'https://election-backend.up.railway.app';
-  const[isLoading, setIsLoading] = useState(false)
+const API_URL = 'https://election-backend.up.railway.app' 
+const[isLoading, setIsLoading] = useState(false)
 
   const {
     register,
@@ -42,7 +42,7 @@ export default function SignupPage() {
   const onSubmit = async (data: FormData) => {
     setIsLoading(true)
     try {
-      const res = await fetch(`${API_URL}/users`, {
+      const res = await fetch(`${API_URL}/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
