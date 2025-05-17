@@ -20,7 +20,7 @@ interface Candidate {
   image: string;
 }
 
-const UNLOCK_TIME = new Date('2025-05-17T20:00:00Z'); // 🕒 Adjust as needed
+const UNLOCK_TIME = new Date(Date.now() + 1 * 60 * 1000); // 3 minutes from now
 
 const ResultPage = () => {
   const [timeLeft, setTimeLeft] = useState<number>(UNLOCK_TIME.getTime() - Date.now());
@@ -115,14 +115,15 @@ const ResultPage = () => {
         </button>
       </div>
 
-      {Object.keys(results).map(position => (
+      {Object.keys(results).filter(position => candidates.some(c => c.position === position)).map(position => (
         <div key={position} className="mb-6">
           <h2 className="text-2xl font-semibold mb-4">{position}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {Object.entries(results[position])
               .sort((a, b) => b[1] - a[1])
               .map(([candidateId, voteCount]) => {
-                const candidate = candidates.find(c => c.id === candidateId);
+const cleanId = candidateId.replace(/^candidate_/, '');
+const candidate = candidates.find(c => c.id === cleanId);
                 return (
                   <motion.div
                     key={candidateId}

@@ -1,17 +1,15 @@
 "use client";
 
-import React,{useState} from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input"; // ✅ Capitalized
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import toast from "react-hot-toast"
-
-
+import toast from "react-hot-toast";
 
 // Validation schema
 const schema = yup.object().shape({
@@ -24,12 +22,21 @@ const schema = yup.object().shape({
   password: yup.string().min(4, "Password must be at least 4 characters").required("Password is required"),
 });
 
-type FormData = yup.InferType<typeof schema>; // Define type from schema
+type FormData = yup.InferType<typeof schema>;
 
 export default function SignupPage() {
   const router = useRouter();
-// const API_URL = 'https://election-backend.up.railway.app' 
-const[isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [formDisabled, setFormDisabled] = useState(false);
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      setFormDisabled(true);
+      toast("You’re already registered. Redirecting...");
+      router.push("/vote"); // or "/dashboard"
+    }
+  }, []);
 
   const {
     register,
@@ -40,40 +47,28 @@ const[isLoading, setIsLoading] = useState(false)
   });
 
   const onSubmit = async (data: FormData) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const res = await fetch('https://election-backend-production-b6f7.up.railway.app/signup', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
 
       const responseData = await res.json();
       if (res.ok) {
         toast.success(responseData.message || "Registration successful!");
-        // alert(responseData.message || "Registration successful!");
-        console.log(responseData);
         const { fullName, matricNumber, department } = responseData.user;
-
         localStorage.setItem('user', JSON.stringify({ fullName, matricNumber, department }));
-
         router.push("/vote");
       } else {
-        toast.error("Registration failed. Please try again.");
-        // alert(responseData.message || "Registration failed. Please try again.");
+        toast.error(responseData.message || "Registration failed. Please try again.");
       }
     } catch (error: any) {
       toast.error("An error occurred. Please try again.");
-      // console.error(error);
-      // alert('Error Submitting Form: ' + error.message);
-    }finally{
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
-    // console.log("Posting to:", `${API_URL}/users`);
-
   };
 
   return (
@@ -89,51 +84,52 @@ const[isLoading, setIsLoading] = useState(false)
         <form className="my-8" onSubmit={handleSubmit(onSubmit)}>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="matricNumber">Matric Number</Label>
-            <Input id="matricNumber" {...register("matricNumber")} placeholder="190295" />
+            <Input id="matricNumber" {...register("matricNumber")} placeholder="190295" disabled={formDisabled} />
             <ErrorText>{errors.matricNumber?.message}</ErrorText>
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
             <Label htmlFor="fullName">Full Name</Label>
-            <Input id="fullName" {...register("fullName")} placeholder="John Doe" />
+            <Input id="fullName" {...register("fullName")} placeholder="John Doe" disabled={formDisabled} />
             <ErrorText>{errors.fullName?.message}</ErrorText>
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
             <Label htmlFor="faculty">Faculty</Label>
-            <Input id="faculty" {...register("faculty")} placeholder="Technology" />
+            <Input id="faculty" {...register("faculty")} placeholder="Technology" disabled={formDisabled} />
             <ErrorText>{errors.faculty?.message}</ErrorText>
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
             <Label htmlFor="department">Department</Label>
-            <Input id="department" {...register("department")} placeholder="Electrical Engineering" />
+            <Input id="department" {...register("department")} placeholder="Electrical Engineering" disabled={formDisabled} />
             <ErrorText>{errors.department?.message}</ErrorText>
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
             <Label htmlFor="hallOfResidence">Hall Of Residence</Label>
-            <Input id="hallOfResidence" {...register("hallOfResidence")} placeholder="Queen Idia Hall" />
+            <Input id="hallOfResidence" {...register("hallOfResidence")} placeholder="Queen Idia Hall" disabled={formDisabled} />
             <ErrorText>{errors.hallOfResidence?.message}</ErrorText>
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
             <Label htmlFor="level">Level</Label>
-            <Input id="level" type="number" {...register("level")} placeholder="400" />
+            <Input id="level" type="number" {...register("level")} placeholder="400" disabled={formDisabled} />
             <ErrorText>{errors.level?.message}</ErrorText>
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" {...register("password")} placeholder="Input Your Password" />
+            <Input id="password" type="password" {...register("password")} placeholder="Input Your Password" disabled={formDisabled} />
             <ErrorText>{errors.password?.message}</ErrorText>
           </LabelInputContainer>
 
-          <button disabled={isLoading}
+          <button
+            disabled={isLoading || formDisabled}
             className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white"
             type="submit"
           >
-           {isLoading ?  'Registering...' : 'Register Now →' }
+            {isLoading ? 'Registering...' : 'Register Now →'}
             <BottomGradient />
           </button>
 
@@ -151,9 +147,7 @@ const[isLoading, setIsLoading] = useState(false)
 
 // Utility Components
 const LabelInputContainer: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => (
-  <div className={cn("flex w-full flex-col space-y-2", className)}>
-    {children}
-  </div>
+  <div className={cn("flex w-full flex-col space-y-2", className)}>{children}</div>
 );
 
 const BottomGradient = () => (

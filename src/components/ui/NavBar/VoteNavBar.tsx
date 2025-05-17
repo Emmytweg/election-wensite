@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { NavbarButton } from '../resizable-navbar';
-import Link from 'next/link';
 import john from '../../../images/john.png';
 
 interface User {
@@ -24,9 +23,9 @@ export default function VoteNavBar() {
 
   const onLogOut = () => {
     localStorage.removeItem('sessionVotes');
-  localStorage.removeItem('user');
-  
-  }
+    localStorage.removeItem('user');
+  };
+
   return (
     <div className='flex justify-between items-center p-6'>
       <div className='flex gap-4'>
@@ -35,7 +34,7 @@ export default function VoteNavBar() {
           alt='User Image'
           height={40}
           width={40}
-          className='rounded-full w-10 h-10   '
+          className='rounded-full w-10 h-10'
         />
         <div>
           <strong>{user?.fullName || 'Loading...'}</strong>
@@ -43,16 +42,14 @@ export default function VoteNavBar() {
           <p className='text-sm text-neutral-500'>{user?.matricNumber}</p>
         </div>
       </div>
-      <Link href='/'>
-        <NavbarButton
-          className=''
-          href='/'
-          variant='primary'
-          onClick={onLogOut}
-        >
-          Sign Out
-        </NavbarButton>
-      </Link>
+      <NavbarButton
+        className=''
+        href='/'
+        variant='primary'
+        onClick={onLogOut}
+      >
+        Sign Out
+      </NavbarButton>
     </div>
   );
 }
