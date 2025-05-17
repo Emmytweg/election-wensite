@@ -12,7 +12,7 @@ interface Candidate {
   image: string;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'election-wensite-production.up.railway.app';
+const API_URL = 'https://election-backend-production-b6f7.up.railway.app'
 
 const Vote = () => {
   const [groupedCandidates, setGroupedCandidates] = useState<Record<string, Candidate[]>>({});
@@ -32,7 +32,7 @@ const Vote = () => {
 
     const user = JSON.parse(localStorage.getItem('user') || 'null');
     if (user) {
-      fetch(`${API_URL}/votes/${user.matricNumber}`)
+      fetch(`${API_URL}/vote/${user.matricNumber}`)
         .then(res => res.json())
         .then(v => {
           setVotes(v);
@@ -63,7 +63,7 @@ const Vote = () => {
       
       toast.success(`Vote recorded for ${position}`);
     } catch (err) {
-      console.error('Vote error:', err);
+      // console.error('Vote error:', err);
       toast.error('Something went wrong. Try again.');
     }
   };
@@ -95,7 +95,7 @@ const Vote = () => {
         <img src={c.image} alt={c.fullName} className="w-full h-40 object-cover mb-2 rounded" />
         <h2 className="text-lg font-semibold">{c.fullName}</h2>
         <p className="text-sm">{c.department}</p>
-        <button
+        <button type='submit'
           onClick={() => handleVote(currentPosition, c.id)}
           disabled={!!votes[currentPosition]}
           className="mt-2 w-full bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 disabled:opacity-50"
